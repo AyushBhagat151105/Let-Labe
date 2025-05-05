@@ -9,7 +9,6 @@ import { MailTrap } from "../utils/mail.js";
 import { generateAccessTokenAndRefreshToken } from "../utils/jwtToken.js";
 import { options } from "../utils/cookiesOptions.js";
 
-
 export const register = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -131,6 +130,7 @@ export const login = asyncHandler(async (req, res) => {
           id: updatedUser.id,
           name: updatedUser.name,
           email: updatedUser.email,
+          role: updatedUser.role,
           isVarifyed: updatedUser.isVarifyed,
         },
       })
@@ -158,6 +158,7 @@ export const getUser = asyncHandler(async (req, res) => {
           id: user.id,
           name: user.name,
           email: user.email,
+          role: user.role,
           isVarifyed: user.isVarifyed,
         },
       })
