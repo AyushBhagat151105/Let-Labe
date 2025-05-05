@@ -39,4 +39,28 @@ model User {
   accessToken             String?
   createdAt               DateTime  @default(now())
   updatedAt               DateTime  @updatedAt
+  Problem                 Problem[]
+}
+
+model Problem {
+  id          String     @id @default(uuid())
+  title       String
+  description String
+  difficulty  Difficulty
+  tags        String[]
+  userId      String
+  examples    Json
+  constraints String
+  hints       String?
+  editorial   String?
+
+  testcases          Json
+  codeSnippets       Json
+  referenceSolutions Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
