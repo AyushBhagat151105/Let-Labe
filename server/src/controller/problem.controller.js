@@ -21,10 +21,6 @@ export const createProblem = asyncHandler(async (req, res) => {
     referenceSolutions,
   } = req.body;
 
-  if (req.user.role !== "ADMIN") {
-    throw new ApiError(403, "You are not allowed to create problems");
-  }
-
   for (const [language, solutionCode] of Object.entries(referenceSolutions)) {
     const languageId = getJudge0LanguageId(language);
 
@@ -44,45 +40,49 @@ export const createProblem = asyncHandler(async (req, res) => {
     const tokens = submissionResults.map((res) => res.token);
 
     const results = await pollBatchResults(tokens);
+    console.log("Contoler results log:-  ", results);
 
     for (let i = 0; i < results.length; i++) {
       const result = results[i];
 
-      if (result.status.id !== 3) {
+      console.log("-----------Result--------------", result.status?.id);
+
+      if (result.status?.id !== 3) {
         throw new ApiError(
           400,
           `Testcase ${i + 1} failed for language ${language}`
         );
       }
     }
-
-    // save the problem to the DB
-    const Problem = await prisma.problem.create({
-      data: {
-        title,
-        description,
-        difficulty,
-        tags,
-        examples,
-        constraints,
-        testcases,
-        codeSnippets,
-        referenceSolutions,
-        userId: req.user.id,
-      },
-    });
-    if (!Problem) {
-      throw new ApiError(400, "Failed To create Probem");
-    }
-
-    return res.status(201).json(
-      new ApiResponse(201, "New Problem created sussesfull", {
-        data: {
-          Problem,
-        },
-      })
-    );
   }
+
+  console.log(req.user_id);
+
+  const Problem = await prisma.problem.create({
+    data: {
+      title,
+      description,
+      difficulty,
+      tags,
+      examples,
+      constraints,
+      testcases,
+      codeSnippets,
+      referenceSolutions,
+      userId: req.user_id,
+    },
+  });
+  if (!Problem) {
+    throw new ApiError(400, "Failed To create Probem");
+  }
+
+  return res.status(201).json(
+    new ApiResponse(201, "New Problem created sussesfull", {
+      data: {
+        Problem,
+      },
+    })
+  );
 });
 
 export const getAllProblems = asyncHandler(async (req, res) => {});

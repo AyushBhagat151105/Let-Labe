@@ -9,18 +9,16 @@ export const getJudge0LanguageId = (language) => {
     JAVASCRIPT: 63,
   };
 
-  return languageMap[language.toUpperCase()] || null;
+  return languageMap[language.toUpperCase()];
 };
 
 export const submitBatch = async (submissions) => {
   const { data } = await axios.post(
-    `${process.env.JUDGE0_API}/submissions/batch?base64_encoded=false`,
+    `${process.env.JUDGE0}/submissions/batch?base64_encoded=false`,
     {
       submissions,
     }
   );
-
-  console.log("Submission Results: ", data);
 
   return data;
 };
@@ -28,17 +26,24 @@ export const submitBatch = async (submissions) => {
 export const pollBatchResults = async (tokens) => {
   while (true) {
     const { data } = await axios.get(
-      `${process.env.JUDGE0_API}/submissions/batch`,
+      `${process.env.JUDGE0}/submissions/batch`,
       {
-        tokens: tokens.join(","),
-        base64_encoded: false,
+        params: {
+          tokens: tokens.join(","),
+          base64_encoded: false,
+        },
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${process.env.JUDGE0_API_SECRATE}`,
+        },
       }
     );
 
     const results = data.submissions;
 
     const isAllDone = results.every(
-      (r) => r.status.id !== 1 && r.status.id !== 2
+      (r) => r.status?.id !== 1 && r.status?.id !== 2
     );
 
     if (isAllDone) {
