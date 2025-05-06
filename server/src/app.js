@@ -21,8 +21,10 @@ app.use(express.static("src/public"));
 
 // APP MAIN ROUTES
 import { authRouter } from "./routes/auth.routes.js";
+import { problemRoutes } from "./routes/problem.routes.js";
 
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/problem", problemRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

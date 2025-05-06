@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { isAuth } from "../middlewares/auth.middleware";
-import { checkAdmin } from "../middlewares/isadmin.middlewares";
+import { isAuth } from "../middlewares/auth.middleware.js";
+import { checkAdmin } from "../middlewares/isadmin.middlewares.js";
 import {
   createProblem,
   deleteProblem,
