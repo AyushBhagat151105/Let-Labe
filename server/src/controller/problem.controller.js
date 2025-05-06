@@ -169,4 +169,20 @@ export const deleteProblem = asyncHandler(async (req, res) => {
   return res.status(200).json(new ApiResponse(200, "Problem deleted"));
 });
 
-export const getAllProblemsSolvedByUser = asyncHandler(async (req, res) => {});
+export const getAllProblemsSolvedByUser = asyncHandler(async (req, res) => {
+  const userId = req.user_id;
+  const problems = await prisma.problemSolved.findMany({
+    where: {
+      userId,
+    },
+    include: {
+      problem: true,
+    },
+  });
+
+  if (!problems) throw new ApiError(404, "No Solved Problem found");
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "All solved problem fetched", problems));
+});
