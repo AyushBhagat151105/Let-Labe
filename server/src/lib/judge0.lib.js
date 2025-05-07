@@ -13,22 +13,12 @@ export const getJudge0LanguageId = (language) => {
 };
 
 export const submitBatch = async (submissions) => {
-  console.log("in llib submison", submissions);
-
   const { data } = await axios.post(
     `${process.env.JUDGE0}/submissions/batch?base64_encoded=false`,
-
-    submissions,
-
     {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Authorization: `Bearer ${process.env.JUDGE0_API_SECRATE}`,
-      },
+      submissions,
     }
   );
-  console.log(data);
 
   return data;
 };

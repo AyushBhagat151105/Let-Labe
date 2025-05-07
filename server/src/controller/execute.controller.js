@@ -32,13 +32,9 @@ export const executeCode = asyncHandler(async (req, res) => {
 
   const submitResponse = await submitBatch(submissions);
 
-  const tokens = submitResponse.map((res) => res.tokens);
-
-  console.log(tokens);
+  const tokens = submitResponse.map((res) => res.token);
 
   const results = await pollBatchResults(tokens);
-
-  console.log("Result", results);
 
   if (!results) throw new ApiError(401, "Sever Problem or wrong code", results);
 
