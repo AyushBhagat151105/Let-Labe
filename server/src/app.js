@@ -22,9 +22,11 @@ app.use(express.static("src/public"));
 // APP MAIN ROUTES
 import { authRouter } from "./routes/auth.routes.js";
 import { problemRoutes } from "./routes/problem.routes.js";
+import { executeRoutes } from "./routes/execute.routes.js";
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/problem", problemRoutes);
+app.use("/api/v1/execute-code", executeRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
