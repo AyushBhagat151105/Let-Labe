@@ -116,7 +116,38 @@ export const executeCode = asyncHandler(async (req, res) => {
     });
   }
 
+  const testCaseResult = detaildeResults.map((result) => ({
+    submissionId: submission.id,
+    testCase: result.testCase,
+    passed: result.passed,
+    stdout: result.stdout,
+    expected: result.expected,
+    stderr: result.stderr,
+    compileOutput: result.compile_output,
+    status: result.status,
+    memory: result.memory,
+    time: result.time,
+  }));
+
+  const data = await prisma.testCaseResult.createMany({
+    data: testCaseResult,
+  });
+
+  if (!data) throw new ApiError(400, "Failed to add testCase Result");
+
+  const submissionWithTestCase = await prisma.submission.findUnique({
+    where: {
+      id: submission.id,
+    },
+    include: {
+      TestCaseResult: true,
+    },
+  });
+
+  if (!submissionWithTestCase)
+    throw new ApiError(400, "Failed to get submissions");
+
   return res
     .status(200)
-    .json(new ApiResponse(200, "Problem sumbited", submission));
+    .json(new ApiResponse(200, "Problem sumbited", submissionWithTestCase));
 });
