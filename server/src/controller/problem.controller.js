@@ -24,11 +24,19 @@ const checkRefrenceSolution = async (referenceSolution, testcases) => {
       };
     });
 
+    console.log(submissions);
+
     const submissionResults = await submitBatch(submissions);
+
+    console.log(submissionResults);
 
     const tokens = submissionResults.map((res) => res.token);
 
+    console.log(tokens);
+
     const results = await pollBatchResults(tokens);
+
+    console.log(results);
 
     for (let i = 0; i < results.length; i++) {
       const result = results[i];
@@ -56,7 +64,7 @@ export const createProblem = asyncHandler(async (req, res) => {
     referenceSolutions,
   } = req.body;
 
-  checkRefrenceSolution(referenceSolutions, testcases);
+  await checkRefrenceSolution(referenceSolutions, testcases);
 
   const Problem = await prisma.problem.create({
     data: {
