@@ -8,9 +8,19 @@ import jwt from "jsonwebtoken";
 import { MailTrap } from "../utils/mail.js";
 import { generateAccessTokenAndRefreshToken } from "../utils/jwtToken.js";
 import { options } from "../utils/cookiesOptions.js";
+import { validateSchema } from "../utils/validateSchema.js";
+import { loginSchema, registerSchema } from "../validation/zodValidation.js";
 
 export const register = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
+
+  const result = validateSchema(registerSchema, req.body);
+
+  if (!result.success) {
+    return res
+      .status(400)
+      .json(new ApiResponse(400, "Validation Error:- ", result));
+  }
 
   const foundedUser = await prisma.user.findUnique({
     where: {
@@ -31,6 +41,7 @@ export const register = asyncHandler(async (req, res) => {
       email: email,
       password: encryptedPassword,
       verificationToken: token,
+      verificationTokenExpiry: new Date(Date.now() + 1000 * 60 * 60),
     },
   });
 
@@ -53,8 +64,6 @@ export const register = asyncHandler(async (req, res) => {
 export const verifyEmail = asyncHandler(async (req, res) => {
   const { token } = req.params;
 
-  console.log(token);
-
   if (!token) {
     throw new ApiError(400, "Token is required");
   }
@@ -62,11 +71,14 @@ export const verifyEmail = asyncHandler(async (req, res) => {
   const user = await prisma.user.findUnique({
     where: {
       verificationToken: token,
+      verificationTokenExpiry: {
+        gte: new Date(),
+      },
     },
   });
 
   if (!user) {
-    throw new ApiError(400, "Invalid token");
+    throw new ApiError(400, "Invalid or expired verification token");
   }
 
   const updateUser = await prisma.user.update({
@@ -76,6 +88,7 @@ export const verifyEmail = asyncHandler(async (req, res) => {
     data: {
       isVarifyed: true,
       verificationToken: null,
+      verificationTokenExpiry: null,
     },
   });
 
@@ -90,6 +103,14 @@ export const verifyEmail = asyncHandler(async (req, res) => {
 
 export const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
+
+  const result = validateSchema(loginSchema, req.body);
+
+  if (!result.success) {
+    return res
+      .status(400)
+      .json(new ApiResponse(400, "Validation Error:- ", result));
+  }
 
   const user = await prisma.user.findUnique({
     where: {
@@ -192,3 +213,5 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
     .cookie("refreshToken", refreshToken, options)
     .json(new ApiResponse(200, "Access token refreshed successfully"));
 });
+
+
