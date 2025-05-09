@@ -125,3 +125,5 @@ model ProblemSolved {
 
   @@unique([userId, problemId])
 }
+
+
