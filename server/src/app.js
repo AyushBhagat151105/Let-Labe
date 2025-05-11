@@ -4,27 +4,9 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import swaggerUi from "swagger-ui-express";
 import swaggerDocument from "./swagger-output.json" with { type: "json" };
-import rateLimit from 'express-rate-limit';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
-
-const generalLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  limit: 100, // 100 requests per 15 minutes
-  message: { error: 'Too many requests, please try again later.' }
-});
-
-const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  limit: 5, // 5 login attempts per 15 minutes
-  message: { error: 'Too many authentication attempts, please try again later.' }
-});
-
-
-app.use(generalLimiter);
-
 
 app.use(
   cors({
@@ -51,8 +33,7 @@ import { healthCheckRouter } from "./routes/healthCheck.routes.js";
 
 app.use("/api/v1/health-check", healthCheckRouter);
 
-// Apply stricter rate limit to auth routes
-app.use("/api/v1/auth", authLimiter, authRouter);
+app.use("/api/v1/auth", authRouter);
 
 app.use("/api/v1/problem", problemRoutes);
 app.use("/api/v1/execute-code", executeRoutes);

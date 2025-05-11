@@ -8,6 +8,7 @@ import {
   getPlayListDetails,
   removeProblemFormPlaylist,
 } from "../controller/playlist.controller.js";
+import { generalLimiter } from "../utils/rateLimit.js";
 
 export const playListRoutes = Router();
 
@@ -15,9 +16,14 @@ playListRoutes.get("/", isAuth, getAllListDetails);
 
 playListRoutes.get("/:playlistId", isAuth, getPlayListDetails);
 
-playListRoutes.post("/create-playlist", isAuth, createPlaylist);
+playListRoutes.post("/create-playlist", isAuth, generalLimiter, createPlaylist);
 
-playListRoutes.post("/:playlistId/add-problem", isAuth, addProblemToPlaylist);
+playListRoutes.post(
+  "/:playlistId/add-problem",
+  isAuth,
+  generalLimiter,
+  addProblemToPlaylist
+);
 
 playListRoutes.delete("/:playlistId/delete", isAuth, deletePlaylist);
 
