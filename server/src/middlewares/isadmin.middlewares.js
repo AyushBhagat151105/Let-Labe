@@ -1,4 +1,3 @@
-import { prisma } from "../client/index.js";
 import { ApiError } from "../utils/apiErrors.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
