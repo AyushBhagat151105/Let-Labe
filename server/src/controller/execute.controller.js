@@ -14,7 +14,7 @@ export const executeCode = asyncHandler(async (req, res) => {
   const { source_code, language_id, stdin, expected_outputs, problemId } =
     req.body;
 
-  const userId = req.user_id;
+  const userId = req.user.id;
 
   const result = validateSchema(executeCodeSchema, req.body);
 

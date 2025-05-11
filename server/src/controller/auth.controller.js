@@ -159,15 +159,15 @@ export const login = asyncHandler(async (req, res) => {
 });
 
 export const getUser = asyncHandler(async (req, res) => {
-  const { user_id } = req;
+  const { user } = req;
 
-  const user = await prisma.user.findUnique({
+  const findUser = await prisma.user.findUnique({
     where: {
-      id: user_id,
+      id: user.id,
     },
   });
 
-  if (!user) throw new ApiError(400, "User not found");
+  if (!findUser) throw new ApiError(400, "User not found");
 
   return res
     .status(200)
@@ -176,11 +176,11 @@ export const getUser = asyncHandler(async (req, res) => {
     .json(
       new ApiResponse(200, "User fetched successfullu", {
         profile: {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-          isVarifyed: user.isVarifyed,
+          id: findUser.id,
+          name: findUser.name,
+          email: findUser.email,
+          role: findUser.role,
+          isVarifyed: findUser.isVarifyed,
         },
       })
     );
@@ -213,5 +213,3 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
     .cookie("refreshToken", refreshToken, options)
     .json(new ApiResponse(200, "Access token refreshed successfully"));
 });
-
-

@@ -196,22 +196,22 @@ export const deleteProblem = asyncHandler(async (req, res) => {
 });
 
 export const getAllProblemsSolvedByUser = asyncHandler(async (req, res) => {
-  const userId = req.user_id;
+  const userId = req.user.id;
 
-  console.log(userId.id);
+  console.log(userId);
 
   const problems = await prisma.problem.findMany({
     where: {
       ProblemSolved: {
         some: {
-          userId: userId.id,
+          userId: userId,
         },
       },
     },
     include: {
       ProblemSolved: {
         where: {
-          userId: userId.id,
+          userId: userId,
         },
       },
     },

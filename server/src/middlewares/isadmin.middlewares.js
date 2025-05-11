@@ -3,7 +3,7 @@ import { ApiError } from "../utils/apiErrors.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
 export const checkAdmin = asyncHandler(async (req, res, next) => {
-  const userId = req.user_id;
+  const userId = req.user.id;
   const user = await prisma.user.findUnique({
     where: {
       id: userId,

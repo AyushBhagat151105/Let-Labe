@@ -4,7 +4,7 @@ import { ApiResponse } from "../utils/apiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
 export const getAllSubmission = asyncHandler(async (req, res) => {
-  const userId = req.user_id;
+  const userId = req.user.id;
 
   if (!userId) throw new ApiError(403, "Unauthorized");
 
@@ -21,7 +21,7 @@ export const getAllSubmission = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, "Submissions fetched successfully", submission));
 });
 export const getAllSubmissionForProblem = asyncHandler(async (req, res) => {
-  const userId = req.user_id;
+  const userId = req.user.id;
 
   if (!userId) throw new ApiError(403, "Unauthorized");
 

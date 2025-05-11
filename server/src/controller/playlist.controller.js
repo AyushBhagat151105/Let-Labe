@@ -35,7 +35,7 @@ export const createPlaylist = asyncHandler(async (req, res) => {
 export const getAllListDetails = asyncHandler(async (req, res) => {
   const playlist = await prisma.playlist.findMany({
     where: {
-      userId: req.user_id,
+      userId: req.user.id,
     },
     include: {
       problems: {
@@ -57,7 +57,7 @@ export const getPlayListDetails = asyncHandler(async (req, res) => {
 
   const playlist = await prisma.playlist.findUnique({
     where: {
-      userId: req.user_id,
+      userId: req.user.id,
       id: playlistId,
     },
     include: {
