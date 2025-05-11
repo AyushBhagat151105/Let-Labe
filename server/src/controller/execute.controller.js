@@ -7,6 +7,8 @@ import {
 import { ApiError } from "../utils/apiErrors.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
+import { validateSchema } from "../utils/validateSchema.js";
+import { executeCodeSchema } from "../validation/zodValidation.js";
 
 export const executeCode = asyncHandler(async (req, res) => {
   const { source_code, language_id, stdin, expected_outputs, problemId } =
@@ -14,7 +16,13 @@ export const executeCode = asyncHandler(async (req, res) => {
 
   const userId = req.user_id;
 
-  // Validate test cases
+  const result = validateSchema(executeCodeSchema, req.body);
+
+  if (!result.success) {
+    return res
+      .status(400)
+      .json(new ApiResponse(400, "Validation Error:- ", result));
+  }
 
   if (
     !Array.isArray(stdin) ||

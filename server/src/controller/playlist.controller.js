@@ -2,11 +2,19 @@ import { prisma } from "../client/index.js";
 import { ApiError } from "../utils/apiErrors.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
+import { validateSchema } from "../utils/validateSchema.js";
+import { createPlaylistSchema } from "../validation/zodValidation.js";
 
 export const createPlaylist = asyncHandler(async (req, res) => {
   const { name, description } = req.body;
 
-  if (!name || !description) throw new ApiError(400, "Fill all the filds");
+  const result = validateSchema(createPlaylistSchema, req.body);
+
+  if (!result.success) {
+    return res
+      .status(400)
+      .json(new ApiResponse(400, "Validation Error:- ", result));
+  }
 
   const userId = req.user_id;
 

@@ -7,6 +7,8 @@ import {
 import { ApiError } from "../utils/apiErrors.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
+import { validateSchema } from "../utils/validateSchema.js";
+import { createProblemSchema } from "../validation/zodValidation.js";
 
 const checkRefrenceSolution = async (referenceSolution, testcases) => {
   for (const [language, solutionCode] of Object.entries(referenceSolution)) {
@@ -63,6 +65,14 @@ export const createProblem = asyncHandler(async (req, res) => {
     codeSnippets,
     referenceSolutions,
   } = req.body;
+
+  const result = validateSchema(createProblemSchema, req.body);
+
+  if (!result.success) {
+    return res
+      .status(400)
+      .json(new ApiResponse(400, "Validation Error:- ", result));
+  }
 
   await checkRefrenceSolution(referenceSolutions, testcases);
 
@@ -130,6 +140,14 @@ export const updateProblem = asyncHandler(async (req, res) => {
     referenceSolutions,
   } = req.body;
   const { id } = req.params;
+
+  const result = validateSchema(createProblemSchema, req.body);
+
+  if (!result.success) {
+    return res
+      .status(400)
+      .json(new ApiResponse(400, "Validation Error:- ", result));
+  }
 
   checkRefrenceSolution(referenceSolutions, testcases);
 
