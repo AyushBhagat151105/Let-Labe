@@ -10,6 +10,7 @@ export const isAuth = asyncHandler(async (req, res, next) => {
 
   const decoded = jwt.verify(accessToken, process.env.ACCESSTOKEN);
 
+  // console.log(decoded);
 
   const user = await prisma.user.findFirst({
     where: {

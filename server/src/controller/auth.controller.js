@@ -134,7 +134,6 @@ export const login = asyncHandler(async (req, res) => {
       id: user.id,
     },
     data: {
-      refreshToken: refreshToken,
       accessToken: accessToken,
     },
   });
@@ -201,11 +200,22 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
 
   const user_id = await jwt.verify(refreshToken, process.env.REFRESHTOKEN);
 
-  console.log(user_id.id);
+  // console.log(user_id);
 
   if (!user_id) throw new ApiError(403, "unAuthorized");
 
-  const { accessToken } = await generateAccessTokenAndRefreshToken(user_id);
+  const { accessToken } = await generateAccessTokenAndRefreshToken(user_id.id);
+
+  await prisma.user.update({
+    where: {
+      id: user_id.id,
+    },
+    data: {
+      accessToken: accessToken,
+    },
+  });
+
+  // console.log(accessToken);
 
   return res
     .status(200)
