@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  check,
   getUser,
   login,
   logout,
@@ -18,3 +19,4 @@ authRouter.post("/login", authLimiter, login);
 authRouter.get("/", isAuth, getUser);
 authRouter.post("/logout", isAuth, logout);
 authRouter.post("/refresh-token", isAuth, refreshAccessToken);
+authRouter.get("/check", isAuth, check);

@@ -223,3 +223,12 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
     .cookie("refreshToken", refreshToken, options)
     .json(new ApiResponse(200, "Access token refreshed successfully"));
 });
+
+export const check = asyncHandler(async (req, res) => {
+  console.log(req.user);
+  res.status(200).json({
+    success: true,
+    message: "User authenticated successfully",
+    user: req.user,
+  });
+});

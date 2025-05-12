@@ -16,6 +16,16 @@ export const isAuth = asyncHandler(async (req, res, next) => {
     where: {
       id: decoded.id,
     },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      avatar: true,
+      role: true,
+      isVarifyed: true,
+      createdAt: true,
+      updatedAt: true,
+    },
   });
 
   if (!user) throw new ApiError(404, "User not found");
