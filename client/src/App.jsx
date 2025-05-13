@@ -26,7 +26,7 @@ function App() {
   return (
     <div className="color-background">
       <Routes>
-        <Route path="/" element={<Layout />}>
+        <Route path="/dashbord" element={<Layout />}>
           <Route
             path="/dashbord"
             element={authUser ? <Dashbord /> : <Navigate to={"/login"} />}

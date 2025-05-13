@@ -37,9 +37,9 @@ function Login() {
       const res = await login(data);
       console.log("login data:- ", res);
 
-      if (res.data.data.status === 200) {
-        navigate("/dashbord");
-      }
+      // if (res.data.data.status === 200) {
+      //   navigate("/dashbord");
+      // }
     } catch (error) {
       console.log("Error in login data:- ", error);
     }
