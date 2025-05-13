@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { loginSchema } from "@/validators/zod";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useNavigate } from "react-router-dom";
+import { Loader2 } from "lucide-react";
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -34,13 +35,13 @@ function Login() {
   const onSubmit = async (data) => {
     try {
       const res = await login(data);
-      console.log("Sign up data:- ", data);
+      console.log("login data:- ", res);
 
-      if (res.success === true) {
-        navigate("/dashboard"); 
+      if (res.data.data.status === 200) {
+        navigate("/dashbord");
       }
     } catch (error) {
-      console.log("Error in Sign up data:- ", error);
+      console.log("Error in login data:- ", error);
     }
   };
 

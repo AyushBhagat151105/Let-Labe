@@ -36,7 +36,7 @@ function Signup() {
       const res = await signup(data);
       console.log("Sign up data:- ", data);
 
-      if (res?.success === true) {
+      if (res?.statusCode === 200) {
         navigate("/login");
       }
     } catch (error) {

@@ -6,6 +6,7 @@ import Dashbord from "./page/Dashbord";
 import { useAuthStore } from "./store/useAuthStore";
 import { useEffect } from "react";
 import { Loader } from "lucide-react";
+import Layout from "./components/Layout";
 
 function App() {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
@@ -23,8 +24,15 @@ function App() {
   }
 
   return (
-    <div className="flex justify-center items-center h-screen color-background">
+    <div className="color-background">
       <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route
+            path="/dashbord"
+            element={authUser ? <Dashbord /> : <Navigate to={"/login"} />}
+          />
+        </Route>
+
         <Route
           path="/login"
           element={!authUser ? <Login /> : <Navigate to={"/dashbord"} />}
@@ -34,10 +42,6 @@ function App() {
           element={!authUser ? <Signup /> : <Navigate to={"/dashbord"} />}
         />
         <Route path="/" element={<Landing />} />
-        <Route
-          path="/dashbord"
-          element={authUser ? <Dashbord /> : <Navigate to={"/login"} />}
-        />
       </Routes>
     </div>
   );
