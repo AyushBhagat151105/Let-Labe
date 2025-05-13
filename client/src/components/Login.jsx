@@ -15,9 +15,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { loginSchema } from "@/validators/zod";
+import { useAuthStore } from "@/store/useAuthStore";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  const { login, isLoggingIn } = useAuthStore();
+  const navigate = useNavigate();
 
   const form = useForm({
     resolver: zodResolver(loginSchema),
@@ -27,9 +31,18 @@ function Login() {
     },
   });
 
-  function onSubmit(values) {
-    console.log(values);
-  }
+  const onSubmit = async (data) => {
+    try {
+      const res = await login(data);
+      console.log("Sign up data:- ", data);
+
+      if (res.success === true) {
+        navigate("/dashboard"); 
+      }
+    } catch (error) {
+      console.log("Error in Sign up data:- ", error);
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900 px-4 w-screen">
@@ -89,8 +102,19 @@ function Login() {
               )}
             />
 
-            <Button type="submit" className="w-full text-base py-2 text-white">
-              Submit
+            <Button
+              type="submit"
+              disabled={isLoggingIn}
+              className="w-full text-base py-2 text-white"
+            >
+              {isLoggingIn ? (
+                <>
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                  Loading...
+                </>
+              ) : (
+                "Login"
+              )}
             </Button>
             <p className="text-center text-sm text-white mt-4">
               Don’t have an account?{" "}
