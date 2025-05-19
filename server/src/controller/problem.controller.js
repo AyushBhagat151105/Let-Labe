@@ -63,6 +63,8 @@ export const createProblem = asyncHandler(async (req, res) => {
     constraints,
     testcases,
     codeSnippets,
+    hints,
+    editorial,
     referenceSolutions,
   } = req.body;
 
@@ -72,6 +74,16 @@ export const createProblem = asyncHandler(async (req, res) => {
     return res
       .status(400)
       .json(new ApiResponse(400, "Validation Error:- ", result));
+  }
+
+  const alreadyhave = await prisma.problem.findFirst({
+    where: {
+      title: title,
+    },
+  });
+
+  if (alreadyhave) {
+    return res.status(400).json(new ApiResponse(400, "Problem already thaer"));
   }
 
   await checkRefrenceSolution(referenceSolutions, testcases);
@@ -86,6 +98,8 @@ export const createProblem = asyncHandler(async (req, res) => {
       constraints,
       testcases,
       codeSnippets,
+      hints,
+      editorial,
       referenceSolutions,
       userId: req.user.id,
     },

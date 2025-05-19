@@ -19,6 +19,7 @@ import { createProblemSchema } from "@/validators/zod";
 import { useNavigate } from "react-router-dom";
 import { Info } from "lucide-react";
 import { sampledpData, sampleStringProblem } from "@/lib/data";
+import { Loader } from "lucide-react";
 
 function CreateProblemForm() {
   const [sampleType, setSampleType] = useState("DP");
@@ -75,7 +76,23 @@ function CreateProblemForm() {
   const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (value) => {
-    console.log(value);
+    try {
+      console.log(value);
+
+      setIsLoading(true);
+      const res = await axiosInstance.post("/problem/create-problem", value);
+      console.log(res.data);
+      toast(res.data.message || "Problem Created successfully⚡");
+      navigation("/dashbord");
+    } catch (error) {
+      console.log(error);
+      const errorMessage =
+        error?.response?.data?.error ||
+        "Something went wrong ❌(Problem already in DataBase)";
+      toast(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const loadSampleData = () => {
@@ -576,7 +593,9 @@ function CreateProblemForm() {
                 className="btn btn-primary btn-lg gap-2 flex items-center cursor-pointer p-3 bg-blue-500 rounded-2xl"
               >
                 {isLoading ? (
-                  <span className="loading loading-spinner text-white"></span>
+                  <span className="loading loading-spinner text-white">
+                    <Loader className="animate-spin" size={48} />
+                  </span>
                 ) : (
                   <>
                     <CheckCircle2 className="w-5 h-5" />

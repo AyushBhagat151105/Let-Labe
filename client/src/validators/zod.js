@@ -61,7 +61,7 @@ export const createProblemSchema = z.object({
     z.string({ required_error: "referenceSolutions is required" })
   ),
   hints: z.string().min(1, "hints are required").optional(),
-  Editorial: z.string().min(1, "Editorial are required").optional(),
+  editorial: z.string().min(1, "Editorial are required").optional(),
 });
 
 export const executeCodeSchema = z.object({

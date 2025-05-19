@@ -69,6 +69,8 @@ model Problem {
   Submission        Submission[]
   ProblemSolved     ProblemSolved[]
   ProblemInPlaylist ProblemInPlaylist[]
+
+  @@index([title])
 }
 
 model Submission {
