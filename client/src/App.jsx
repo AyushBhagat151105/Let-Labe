@@ -7,6 +7,8 @@ import { useAuthStore } from "./store/useAuthStore";
 import { useEffect } from "react";
 import { Loader } from "lucide-react";
 import Layout from "./components/Layout";
+import AdminRoute from "./components/AdminRoute";
+import AddProblem from "./page/AddProblem";
 
 function App() {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
@@ -41,7 +43,9 @@ function App() {
         >
           <Route index element={<Dashbord />} />
           <Route path="profile" element={<div>Profile Page</div>} />
-          {/* Add other protected routes here */}
+          <Route element={<AdminRoute />}>
+            <Route path="add-problem" element={<AddProblem />} />
+          </Route>
         </Route>
       </Routes>
     </div>

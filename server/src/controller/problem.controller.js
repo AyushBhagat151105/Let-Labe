@@ -87,7 +87,7 @@ export const createProblem = asyncHandler(async (req, res) => {
       testcases,
       codeSnippets,
       referenceSolutions,
-      userId: req.user_id,
+      userId: req.user.id,
     },
   });
   if (!Problem) {
