@@ -1,7 +1,6 @@
 import React from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import {
   Plus,
   Trash2,
@@ -19,453 +18,7 @@ import { toast } from "sonner";
 import { createProblemSchema } from "@/validators/zod";
 import { useNavigate } from "react-router-dom";
 import { Info } from "lucide-react";
-
-const sampledpData = {
-  title: "Climbing Stairs",
-  category: "dp", // Dynamic Programming
-  description:
-    "You are climbing a staircase. It takes n steps to reach the top. Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?",
-  difficulty: "EASY",
-  tags: ["Dynamic Programming", "Math", "Memoization"],
-  constraints: "1 <= n <= 45",
-  hints:
-    "To reach the nth step, you can either come from the (n-1)th step or the (n-2)th step.",
-  editorial:
-    "This is a classic dynamic programming problem. The number of ways to reach the nth step is the sum of the number of ways to reach the (n-1)th step and the (n-2)th step, forming a Fibonacci-like sequence.",
-  testcases: [
-    {
-      input: "2",
-      output: "2",
-    },
-    {
-      input: "3",
-      output: "3",
-    },
-    {
-      input: "4",
-      output: "5",
-    },
-  ],
-  examples: {
-    JAVASCRIPT: {
-      input: "n = 2",
-      output: "2",
-      explanation:
-        "There are two ways to climb to the top:\n1. 1 step + 1 step\n2. 2 steps",
-    },
-    PYTHON: {
-      input: "n = 3",
-      output: "3",
-      explanation:
-        "There are three ways to climb to the top:\n1. 1 step + 1 step + 1 step\n2. 1 step + 2 steps\n3. 2 steps + 1 step",
-    },
-    JAVA: {
-      input: "n = 4",
-      output: "5",
-      explanation:
-        "There are five ways to climb to the top:\n1. 1 step + 1 step + 1 step + 1 step\n2. 1 step + 1 step + 2 steps\n3. 1 step + 2 steps + 1 step\n4. 2 steps + 1 step + 1 step\n5. 2 steps + 2 steps",
-    },
-  },
-  codeSnippets: {
-    JAVASCRIPT: `/**
-* @param {number} n
-* @return {number}
-*/
-function climbStairs(n) {
-// Write your code here
-}
-
-// Parse input and execute
-const readline = require('readline');
-const rl = readline.createInterface({
-input: process.stdin,
-output: process.stdout,
-terminal: false
-});
-
-rl.on('line', (line) => {
-const n = parseInt(line.trim());
-const result = climbStairs(n);
-
-console.log(result);
-rl.close();
-});`,
-    PYTHON: `class Solution:
-  def climbStairs(self, n: int) -> int:
-      # Write your code here
-      pass
-
-# Input parsing
-if __name__ == "__main__":
-  import sys
-  
-  # Parse input
-  n = int(sys.stdin.readline().strip())
-  
-  # Solve
-  sol = Solution()
-  result = sol.climbStairs(n)
-  
-  # Print result
-  print(result)`,
-    JAVA: `import java.util.Scanner;
-
-class Main {
-  public int climbStairs(int n) {
-      // Write your code here
-      return 0;
-  }
-  
-  public static void main(String[] args) {
-      Scanner scanner = new Scanner(System.in);
-      int n = Integer.parseInt(scanner.nextLine().trim());
-      
-      // Use Main class instead of Solution
-      Main main = new Main();
-      int result = main.climbStairs(n);
-      
-      System.out.println(result);
-      scanner.close();
-  }
-}`,
-  },
-  referenceSolutions: {
-    JAVASCRIPT: `/**
-* @param {number} n
-* @return {number}
-*/
-function climbStairs(n) {
-// Base cases
-if (n <= 2) {
-  return n;
-}
-
-// Dynamic programming approach
-let dp = new Array(n + 1);
-dp[1] = 1;
-dp[2] = 2;
-
-for (let i = 3; i <= n; i++) {
-  dp[i] = dp[i - 1] + dp[i - 2];
-}
-
-return dp[n];
-
-/* Alternative approach with O(1) space
-let a = 1; // ways to climb 1 step
-let b = 2; // ways to climb 2 steps
-
-for (let i = 3; i <= n; i++) {
-  let temp = a + b;
-  a = b;
-  b = temp;
-}
-
-return n === 1 ? a : b;
-*/
-}
-
-// Parse input and execute
-const readline = require('readline');
-const rl = readline.createInterface({
-input: process.stdin,
-output: process.stdout,
-terminal: false
-});
-
-rl.on('line', (line) => {
-const n = parseInt(line.trim());
-const result = climbStairs(n);
-
-console.log(result);
-rl.close();
-});`,
-    PYTHON: `class Solution:
-  def climbStairs(self, n: int) -> int:
-      # Base cases
-      if n <= 2:
-          return n
-      
-      # Dynamic programming approach
-      dp = [0] * (n + 1)
-      dp[1] = 1
-      dp[2] = 2
-      
-      for i in range(3, n + 1):
-          dp[i] = dp[i - 1] + dp[i - 2]
-      
-      return dp[n]
-      
-      # Alternative approach with O(1) space
-      # a, b = 1, 2
-      # 
-      # for i in range(3, n + 1):
-      #     a, b = b, a + b
-      # 
-      # return a if n == 1 else b
-
-# Input parsing
-if __name__ == "__main__":
-  import sys
-  
-  # Parse input
-  n = int(sys.stdin.readline().strip())
-  
-  # Solve
-  sol = Solution()
-  result = sol.climbStairs(n)
-  
-  # Print result
-  print(result)`,
-    JAVA: `import java.util.Scanner;
-
-class Main {
-  public int climbStairs(int n) {
-      // Base cases
-      if (n <= 2) {
-          return n;
-      }
-      
-      // Dynamic programming approach
-      int[] dp = new int[n + 1];
-      dp[1] = 1;
-      dp[2] = 2;
-      
-      for (int i = 3; i <= n; i++) {
-          dp[i] = dp[i - 1] + dp[i - 2];
-      }
-      
-      return dp[n];
-      
-      /* Alternative approach with O(1) space
-      int a = 1; // ways to climb 1 step
-      int b = 2; // ways to climb 2 steps
-      
-      for (int i = 3; i <= n; i++) {
-          int temp = a + b;
-          a = b;
-          b = temp;
-      }
-      
-      return n == 1 ? a : b;
-      */
-  }
-  
-  public static void main(String[] args) {
-      Scanner scanner = new Scanner(System.in);
-      int n = Integer.parseInt(scanner.nextLine().trim());
-      
-      // Use Main class instead of Solution
-      Main main = new Main();
-      int result = main.climbStairs(n);
-      
-      System.out.println(result);
-      scanner.close();
-  }
-}`,
-  },
-};
-
-// Sample problem data for another type of question
-const sampleStringProblem = {
-  title: "Valid Palindrome",
-  description:
-    "A phrase is a palindrome if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward. Alphanumeric characters include letters and numbers. Given a string s, return true if it is a palindrome, or false otherwise.",
-  difficulty: "EASY",
-  tags: ["String", "Two Pointers"],
-  constraints:
-    "1 <= s.length <= 2 * 10^5\ns consists only of printable ASCII characters.",
-  hints:
-    "Consider using two pointers, one from the start and one from the end, moving towards the center.",
-  editorial:
-    "We can use two pointers approach to check if the string is a palindrome. One pointer starts from the beginning and the other from the end, moving towards each other.",
-  testcases: [
-    {
-      input: "A man, a plan, a canal: Panama",
-      output: "true",
-    },
-    {
-      input: "race a car",
-      output: "false",
-    },
-    {
-      input: " ",
-      output: "true",
-    },
-  ],
-  examples: {
-    JAVASCRIPT: {
-      input: 's = "A man, a plan, a canal: Panama"',
-      output: "true",
-      explanation: '"amanaplanacanalpanama" is a palindrome.',
-    },
-    PYTHON: {
-      input: 's = "A man, a plan, a canal: Panama"',
-      output: "true",
-      explanation: '"amanaplanacanalpanama" is a palindrome.',
-    },
-    JAVA: {
-      input: 's = "A man, a plan, a canal: Panama"',
-      output: "true",
-      explanation: '"amanaplanacanalpanama" is a palindrome.',
-    },
-  },
-  codeSnippets: {
-    JAVASCRIPT: `/**
-   * @param {string} s
-   * @return {boolean}
-   */
-  function isPalindrome(s) {
-    // Write your code here
-  }
-  
-  // Add readline for dynamic input handling
-  const readline = require('readline');
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-    terminal: false
-  });
-  
-  // Process input line
-  rl.on('line', (line) => {
-    // Call solution with the input string
-    const result = isPalindrome(line);
-    
-    // Output the result
-    console.log(result ? "true" : "false");
-    rl.close();
-  });`,
-    PYTHON: `class Solution:
-      def isPalindrome(self, s: str) -> bool:
-          # Write your code here
-          pass
-  
-  # Input parsing
-  if __name__ == "__main__":
-      import sys
-      # Read the input string
-      s = sys.stdin.readline().strip()
-      
-      # Call solution
-      sol = Solution()
-      result = sol.isPalindrome(s)
-      
-      # Output result
-      print(str(result).lower())  # Convert True/False to lowercase true/false`,
-    JAVA: `import java.util.Scanner;
-
-public class Main {
-    public static String preprocess(String s) {
-        return s.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
-    }
-
-    public static boolean isPalindrome(String s) {
-       
-    }
-
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        String input = sc.nextLine();
-
-        boolean result = isPalindrome(input);
-        System.out.println(result ? "true" : "false");
-    }
-}
-`,
-  },
-  referenceSolutions: {
-    JAVASCRIPT: `/**
-   * @param {string} s
-   * @return {boolean}
-   */
-  function isPalindrome(s) {
-    // Convert to lowercase and remove non-alphanumeric characters
-    s = s.toLowerCase().replace(/[^a-z0-9]/g, '');
-    
-    // Check if it's a palindrome
-    let left = 0;
-    let right = s.length - 1;
-    
-    while (left < right) {
-      if (s[left] !== s[right]) {
-        return false;
-      }
-      left++;
-      right--;
-    }
-    
-    return true;
-  }
-  
-  // Add readline for dynamic input handling
-  const readline = require('readline');
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-    terminal: false
-  });
-  
-  // Process input line
-  rl.on('line', (line) => {
-    // Call solution with the input string
-    const result = isPalindrome(line);
-    
-    // Output the result
-    console.log(result ? "true" : "false");
-    rl.close();
-  });`,
-    PYTHON: `class Solution:
-      def isPalindrome(self, s: str) -> bool:
-          # Convert to lowercase and keep only alphanumeric characters
-          filtered_chars = [c.lower() for c in s if c.isalnum()]
-          
-          # Check if it's a palindrome
-          return filtered_chars == filtered_chars[::-1]
-  
-  # Input parsing
-  if __name__ == "__main__":
-      import sys
-      # Read the input string
-      s = sys.stdin.readline().strip()
-      
-      # Call solution
-      sol = Solution()
-      result = sol.isPalindrome(s)
-      
-      # Output result
-      print(str(result).lower())  # Convert True/False to lowercase true/false`,
-    JAVA: `import java.util.Scanner;
-
-public class Main {
-    public static String preprocess(String s) {
-        return s.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
-    }
-
-    public static boolean isPalindrome(String s) {
-        s = preprocess(s);
-        int left = 0, right = s.length() - 1;
-
-        while (left < right) {
-            if (s.charAt(left) != s.charAt(right)) return false;
-            left++;
-            right--;
-        }
-
-        return true;
-    }
-
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        String input = sc.nextLine();
-
-        boolean result = isPalindrome(input);
-        System.out.println(result ? "true" : "false");
-    }
-}
-`,
-  },
-};
+import { sampledpData, sampleStringProblem } from "@/lib/data";
 
 function CreateProblemForm() {
   const [sampleType, setSampleType] = useState("DP");
@@ -531,18 +84,13 @@ function CreateProblemForm() {
     replaceTags(sampleData.tags.map((tag) => tag));
     replacetestcases(sampleData.testcases.map((tc) => tc));
 
-    // Reset the form with sample data
     reset(sampleData);
   };
 
   return (
-    // Improved coding problem creation form with enhanced UI/UX
-    // Featuring better visual hierarchy, spacing, and responsive design
-
     <div className="container mx-auto py-10 px-4 max-w-6xl">
       <div className="bg-gray-800 rounded-xl shadow-xl border border-gray-700 overflow-hidden">
         <div className="card-body p-6 md:p-8">
-          {/* Header Section with better styling */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 pb-6 border-b border-gray-700">
             <h2 className="text-3xl font-bold flex items-center gap-3 text-white">
               <FileText className="w-8 h-8 text-primary" />
@@ -550,29 +98,35 @@ function CreateProblemForm() {
             </h2>
 
             <div className="flex flex-col md:flex-row gap-4 mt-4 md:mt-0 w-full md:w-auto">
-              <div className="join shadow-sm">
+              <div className="shadow-sm gap-2.5 flex">
                 <button
                   type="button"
-                  className={`btn join-item ${
-                    sampleType === "DP" ? "btn-active" : ""
+                  className={`btn join-item flex items-center gap-1 transition-colors cursor-pointer px-3 py-2 rounded-2xl ${
+                    sampleType === "DP"
+                      ? "btn-active text-white bg-blue-600"
+                      : "bg-gray-100 text-gray-700"
                   }`}
                   onClick={() => setSampleType("DP")}
                 >
+                  {sampleType === "DP"}
                   DP Problem
                 </button>
                 <button
                   type="button"
-                  className={`btn join-item ${
-                    sampleType === "string" ? "btn-active" : ""
+                  className={`btn join-item flex items-center gap-1 transition-colors cursor-pointer px-3 rounded-2xl ${
+                    sampleType === "string"
+                      ? "btn-active text-white bg-blue-600"
+                      : "bg-gray-100 text-gray-700"
                   }`}
                   onClick={() => setSampleType("string")}
                 >
+                  {sampleType === "string"}
                   String Problem
                 </button>
               </div>
               <button
                 type="button"
-                className="btn btn-secondary gap-2 shadow-sm"
+                className="btn btn-secondary gap-2 shadow-sm cursor-pointer px-3 rounded-2xl flex items-center"
                 onClick={loadSampleData}
               >
                 <Download className="w-4 h-4" />
@@ -582,7 +136,7 @@ function CreateProblemForm() {
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
-            {/* Basic Information - Improved spacing and visual hierarchy */}
+            {/* Basic Information*/}
             <div className="bg-gray-900/30 rounded-xl p-6 shadow-sm border border-gray-700">
               <h3 className="text-xl font-semibold mb-6 flex items-center gap-2 text-gray-100">
                 <Info className="w-5 h-5 text-primary" />
@@ -598,13 +152,13 @@ function CreateProblemForm() {
                   </label>
                   <input
                     type="text"
-                    className="input input-bordered w-full text-base bg-gray-800 focus:ring-2 focus:ring-primary/30 transition-all text-white"
+                    className="input input-bordered w-full text-base p-3 bg-gray-800 focus:ring-2 focus:ring-primary/30 transition-all text-white px-3 rounded-2xl"
                     {...register("title")}
                     placeholder="Enter problem title"
                   />
                   {errors.title && (
                     <label className="label">
-                      <span className="label-text-alt text-error">
+                      <span className="label-text-alt text-error text-red-500">
                         {errors.title.message}
                       </span>
                     </label>
@@ -618,13 +172,13 @@ function CreateProblemForm() {
                     </span>
                   </label>
                   <textarea
-                    className="textarea textarea-bordered min-h-40 w-full text-base p-4 resize-y bg-gray-800 focus:ring-2 focus:ring-primary/30 transition-all text-white"
+                    className="textarea textarea-bordered min-h-40 w-full text-base p-4 resize-y bg-gray-800 focus:ring-2 focus:ring-primary/30 transition-all text-white px-3 rounded-2xl"
                     {...register("description")}
                     placeholder="Enter problem description"
                   />
                   {errors.description && (
                     <label className="label">
-                      <span className="label-text-alt text-error">
+                      <span className="label-text-alt text-error text-red-500">
                         {errors.description.message}
                       </span>
                     </label>
@@ -633,12 +187,12 @@ function CreateProblemForm() {
 
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text text-base font-medium text-gray-700 dark:text-gray-300">
+                    <span className="label-text text-base font-medium text-gray-700 dark:text-gray-300 rounded-2xl">
                       Difficulty
                     </span>
                   </label>
                   <select
-                    className="select select-bordered w-full text-base bg-gray-800 focus:ring-2 focus:ring-primary/30 transition-all text-white"
+                    className="select select-bordered w-full text-base bg-gray-800 focus:ring-2 focus:ring-primary/30 transition-all text-white px-3 py-2 rounded-2xl"
                     {...register("difficulty")}
                   >
                     <option value="EASY">Easy</option>
@@ -647,7 +201,7 @@ function CreateProblemForm() {
                   </select>
                   {errors.difficulty && (
                     <label className="label">
-                      <span className="label-text-alt text-error">
+                      <span className="label-text-alt text-error text-red-500">
                         {errors.difficulty.message}
                       </span>
                     </label>
@@ -656,7 +210,7 @@ function CreateProblemForm() {
               </div>
             </div>
 
-            {/* Tags - Improved UI */}
+            {/* Tags */}
             <div className="bg-gray-900/30 rounded-xl p-6 shadow-sm border border-gray-700">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-semibold flex items-center gap-2 text-gray-100">
@@ -665,7 +219,7 @@ function CreateProblemForm() {
                 </h3>
                 <button
                   type="button"
-                  className="btn btn-primary btn-sm shadow-sm"
+                  className="btn btn-primary btn-sm shadow-sm cursor-pointer  rounded-2xl flex items-center"
                   onClick={() => appendTag("")}
                 >
                   <Plus className="w-4 h-4 mr-1" /> Add Tag
@@ -685,25 +239,25 @@ function CreateProblemForm() {
                     />
                     <button
                       type="button"
-                      className="btn btn-ghost btn-square btn-sm text-gray-500 hover:text-error"
+                      className="btn btn-ghost btn-square btn-sm text-gray-500 hover:text-error group cursor-pointer"
                       onClick={() => removeTag(index)}
                       disabled={tagFields.length === 1}
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="w-4 h-4 text-gray-500 group-hover:text-red-500 transition-colors duration-200" />
                     </button>
                   </div>
                 ))}
               </div>
               {errors.tags && (
                 <div className="mt-2">
-                  <span className="text-error text-sm">
+                  <span className="text-error text-sm text-red-500">
                     {errors.tags.message}
                   </span>
                 </div>
               )}
             </div>
 
-            {/* Test Cases - Enhanced UI */}
+            {/* Test Cases  */}
             <div className="bg-gray-900/30 rounded-xl p-6 shadow-sm border border-gray-700">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-semibold flex items-center gap-2 text-gray-100">
@@ -712,7 +266,7 @@ function CreateProblemForm() {
                 </h3>
                 <button
                   type="button"
-                  className="btn btn-primary btn-sm shadow-sm"
+                  className="btn btn-primary btn-sm shadow-sm flex items-center cursor-pointer"
                   onClick={() => appendTestCase({ input: "", output: "" })}
                 >
                   <Plus className="w-4 h-4 mr-1" /> Add Test Case
@@ -730,11 +284,11 @@ function CreateProblemForm() {
                       </h4>
                       <button
                         type="button"
-                        className="btn btn-ghost btn-sm text-error"
+                        className="btn btn-ghost btn-sm text-error cursor-pointer flex items-center hover:text-red-500"
                         onClick={() => removeTestCase(index)}
                         disabled={testCaseFields.length === 1}
                       >
-                        <Trash2 className="w-4 h-4 mr-1" /> Remove
+                        <Trash2 className="w-4 h-4 mr-1 " /> Remove
                       </button>
                     </div>
                     <div className="p-4 md:p-6">
@@ -752,7 +306,7 @@ function CreateProblemForm() {
                           />
                           {errors.testcases?.[index]?.input && (
                             <label className="label">
-                              <span className="label-text-alt text-error">
+                              <span className="label-text-alt text-error text-red-500">
                                 {errors.testcases[index].input.message}
                               </span>
                             </label>
@@ -771,7 +325,7 @@ function CreateProblemForm() {
                           />
                           {errors.testcases?.[index]?.output && (
                             <label className="label">
-                              <span className="label-text-alt text-error">
+                              <span className="label-text-alt text-error text-red-500">
                                 {errors.testcases[index].output.message}
                               </span>
                             </label>
@@ -784,14 +338,13 @@ function CreateProblemForm() {
               </div>
               {errors.testcases && !Array.isArray(errors.testcases) && (
                 <div className="mt-2">
-                  <span className="text-error text-sm">
+                  <span className="text-error text-sm text-red-500">
                     {errors.testcases.message}
                   </span>
                 </div>
               )}
             </div>
 
-            {/* Code Editor Sections - Enhanced UI */}
             <div className="space-y-10">
               {["JAVASCRIPT", "PYTHON", "JAVA"].map((language) => (
                 <div
@@ -840,7 +393,7 @@ function CreateProblemForm() {
                       </div>
                       {errors.codeSnippets?.[language] && (
                         <div className="p-3">
-                          <span className="text-error text-sm">
+                          <span className="text-error text-sm text-red-500">
                             {errors.codeSnippets[language].message}
                           </span>
                         </div>
@@ -882,7 +435,7 @@ function CreateProblemForm() {
                       </div>
                       {errors.referenceSolutions?.[language] && (
                         <div className="p-3">
-                          <span className="text-error text-sm">
+                          <span className="text-error text-sm text-red-500">
                             {errors.referenceSolutions[language].message}
                           </span>
                         </div>
@@ -911,7 +464,7 @@ function CreateProblemForm() {
                             />
                             {errors.examples?.[language]?.input && (
                               <label className="label">
-                                <span className="label-text-alt text-error">
+                                <span className="label-text-alt text-error text-red-500">
                                   {errors.examples[language].input.message}
                                 </span>
                               </label>
@@ -930,7 +483,7 @@ function CreateProblemForm() {
                             />
                             {errors.examples?.[language]?.output && (
                               <label className="label">
-                                <span className="label-text-alt text-error">
+                                <span className="label-text-alt text-error text-red-500">
                                   {errors.examples[language].output.message}
                                 </span>
                               </label>
@@ -956,7 +509,6 @@ function CreateProblemForm() {
               ))}
             </div>
 
-            {/* Additional Information - Enhanced UI */}
             <div className="bg-gray-900/30 rounded-xl p-6 shadow-sm border border-gray-700">
               <h3 className="text-xl font-semibold mb-6 flex items-center gap-2 text-gray-100">
                 <Lightbulb className="w-5 h-5 text-amber-500" />
@@ -979,7 +531,7 @@ function CreateProblemForm() {
                   />
                   {errors.constraints && (
                     <label className="label">
-                      <span className="label-text-alt text-error">
+                      <span className="label-text-alt text-error text-red-500">
                         {errors.constraints.message}
                       </span>
                     </label>
@@ -1018,16 +570,11 @@ function CreateProblemForm() {
               </div>
             </div>
 
-            {/* Form Actions - Enhanced UI */}
             <div className="flex justify-between items-center pt-6 border-t border-gray-700">
               <button
-                type="button"
-                className="btn btn-outline btn-lg text-gray-300 border-gray-600 hover:bg-gray-700"
+                type="submit"
+                className="btn btn-primary btn-lg gap-2 flex items-center cursor-pointer p-3 bg-blue-500 rounded-2xl"
               >
-                Save as Draft
-              </button>
-
-              <button type="submit" className="btn btn-primary btn-lg gap-2">
                 {isLoading ? (
                   <span className="loading loading-spinner text-white"></span>
                 ) : (

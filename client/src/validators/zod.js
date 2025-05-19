@@ -26,12 +26,18 @@ export const loginSchema = z.object({
 });
 
 export const createProblemSchema = z.object({
-  title: z.string({ required_error: "Title is required" }),
-  description: z.string({ required_error: "Description is required" }),
+  title: z
+    .string({ required_error: "Title is required" })
+    .min(1, "Title is required"),
+  description: z
+    .string({ required_error: "Description is required" })
+    .min(1, "Description is required"),
   difficulty: z.enum(["EASY", "MEDIUM", "HARD"], {
     required_error: "Difficulty Required fild must be like EASY,MEDIUM,HARD",
   }),
-  tags: z.array(z.string({ required_error: "Tages are required" })),
+  tags: z
+    .array(z.string({ required_error: "Tages are required" }))
+    .min(1, "tags is required"),
   examples: z.record(
     z.object({
       input: z.string({ required_error: "input is required" }),
@@ -39,7 +45,9 @@ export const createProblemSchema = z.object({
       explanation: z.string({ required_error: "explanation is required" }),
     })
   ),
-  constraints: z.string({ required_error: "constraints is required" }),
+  constraints: z
+    .string({ required_error: "constraints is required" })
+    .min(1, "constraints are required"),
   testcases: z.array(
     z.object({
       input: z.string({ required_error: "Inpute is required" }),
@@ -52,6 +60,8 @@ export const createProblemSchema = z.object({
   referenceSolutions: z.record(
     z.string({ required_error: "referenceSolutions is required" })
   ),
+  hints: z.string().min(1, "hints are required").optional(),
+  Editorial: z.string().min(1, "Editorial are required").optional(),
 });
 
 export const executeCodeSchema = z.object({
