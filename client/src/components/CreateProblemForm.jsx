@@ -107,7 +107,7 @@ function CreateProblemForm() {
   return (
     <div className="container mx-auto py-10 px-4 max-w-6xl">
       <div className="bg-gray-800 rounded-xl shadow-xl border border-gray-700 overflow-hidden">
-        <div className="card-body p-6 md:p-8">
+        <div className="bg-card p-6 md:p-8">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 pb-6 border-b border-gray-700">
             <h2 className="text-3xl font-bold flex items-center gap-3 text-white">
               <FileText className="w-8 h-8 text-primary" />
