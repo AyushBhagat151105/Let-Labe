@@ -2,7 +2,6 @@ import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
 import { toast } from "sonner";
 
-
 export const useExecutionStore = create((set) => ({
   isExecuting: false,
   submission: null,
@@ -36,10 +35,10 @@ export const useExecutionStore = create((set) => ({
 
       set({ submission: res.data.submission });
 
-      toast(res.data.message);
+      toast.success(res.data.message);
     } catch (error) {
       console.log("Error executing code", error);
-      toast("Error executing code");
+      toast.error("Error executing code");
     } finally {
       set({ isExecuting: false });
     }
