@@ -32,6 +32,9 @@ export const getAllSubmissionForProblem = asyncHandler(async (req, res) => {
       userId: userId,
       problemId: problemId,
     },
+    include: {
+      TestCaseResult: true,
+    },
   });
   if (!submissions) throw new ApiError(400, "Not found");
 

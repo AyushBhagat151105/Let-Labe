@@ -148,7 +148,7 @@ const ProblemTable = ({ problems }) => {
                     </TableCell>
                     <TableCell>
                       <Link
-                        to={`/problem/${problem.id}`}
+                        to={`dashbord/problem/${problem.id}`}
                         className="font-semibold hover:underline"
                       >
                         {problem.title}
