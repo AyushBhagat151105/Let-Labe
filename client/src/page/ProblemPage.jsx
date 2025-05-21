@@ -87,7 +87,7 @@ const ProblemPage = () => {
   return (
     <div className="max-w-7xl mx-auto py-4 px-2">
       <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
-        <Link to="/" className="flex items-center gap-1 text-primary">
+        <Link to="/dashbord" className="flex items-center gap-1 text-primary">
           <Home className="w-4 h-4" /> <ChevronRight className="w-4 h-4" />
         </Link>
         <span className="font-semibold">{problem.title}</span>
@@ -239,7 +239,7 @@ const ProblemPage = () => {
             <Button
               onClick={handleRunCode}
               disabled={isExecuting}
-              className="w-full"
+              className="w-full text-white"
             >
               <Play className="w-4 h-4 mr-2" /> Run Code
             </Button>

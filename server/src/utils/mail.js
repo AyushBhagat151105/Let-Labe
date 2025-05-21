@@ -14,13 +14,12 @@ export class MailTrap {
     this.email = email;
   }
 
-  async sendMail(token) {
+  async sendMail({ subject, html }) {
     await transporter.sendMail({
-      from: "ayush@gmail.com",
+      from: "Ayush <ayush@gmail.com>",
       to: this.email,
-      subject: "Virify your email address",
-      text: `${token}`,
-      html: `<b>${token}</b>`,
+      subject,
+      html,
     });
   }
 }

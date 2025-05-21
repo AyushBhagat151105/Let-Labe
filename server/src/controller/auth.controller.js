@@ -48,11 +48,35 @@ export const register = asyncHandler(async (req, res) => {
   if (!user) {
     throw new ApiError(500, "User not created");
   }
-
   const link = `${process.env.CLIENT_URL}/auth/verify/${token}`;
   const mail = new MailTrap(email);
 
-  mail.sendMail(`Your Account Verification Link: ${link}`);
+  const emailHTML = `
+  <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; background-color: #f8f9fa; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+    <h2 style="color: #2d3748;">Welcome to Our App 👋</h2>
+    <p style="font-size: 16px; color: #4a5568;">
+      Thank you for signing up! Please verify your account by clicking the button below:
+    </p>
+    <a href="${link}" style="display: inline-block; margin: 20px 0; background-color: #4f46e5; color: #ffffff; text-decoration: none; padding: 12px 20px; border-radius: 6px; font-weight: bold;">
+      Verify Account
+    </a>
+    <p style="font-size: 14px; color: #718096;">
+      If the button doesn't work, you can copy and paste this URL into your browser:
+    </p>
+    <p style="font-size: 14px; color: #3182ce; word-break: break-all;">
+      <a href="${link}" style="color: #3182ce;">${link}</a>
+    </p>
+    <hr style="margin-top: 30px;" />
+    <p style="font-size: 12px; color: #a0aec0;">
+      If you didn’t create an account, you can safely ignore this email.
+    </p>
+  </div>
+`;
+
+  mail.sendMail({
+    subject: "Verify Your Email – Action Required",
+    html: emailHTML,
+  });
 
   return res
     .status(200)
@@ -94,7 +118,29 @@ export const verifyEmail = asyncHandler(async (req, res) => {
 
   const mail = new MailTrap(user.email);
 
-  mail.sendMail(`Your Account is Verified`);
+  const emailHTML = `
+  <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; background-color: #f8f9fa; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+    <h2 style="color: #38a169;">✅ Account Verified Successfully</h2>
+    <p style="font-size: 16px; color: #4a5568;">
+      Hi <strong>${user.name || "there"}</strong>,<br><br>
+      Your account has been verified successfully. You can now log in and start using all the features of our platform.
+    </p>
+    <a href="${
+      process.env.CLIENT_URL
+    }/login" style="display: inline-block; margin: 20px 0; background-color: #4f46e5; color: #ffffff; text-decoration: none; padding: 12px 20px; border-radius: 6px; font-weight: bold;">
+      Go to Dashboard
+    </a>
+    <hr style="margin-top: 30px;" />
+    <p style="font-size: 14px; color: #a0aec0;">
+      If you didn’t verify your account or this wasn't you, please contact our support team immediately.
+    </p>
+  </div>
+`;
+
+  mail.sendMail({
+    subject: "🎉 Your Account is Now Verified!",
+    html: emailHTML,
+  });
 
   return res
     .status(200)

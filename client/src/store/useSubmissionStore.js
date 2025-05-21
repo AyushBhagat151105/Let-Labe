@@ -48,7 +48,7 @@ export const useSubmissionStore = create((set, get) => ({
         `/submission/get-submissions-count/${problemId}`
       );
 
-      set({ submissionCount: res.data.count });
+      set({ submissionCount: res.data.data });
     } catch (error) {
       console.log("Error getting submission count for problem", error);
       toast("Error getting submission count for problem");

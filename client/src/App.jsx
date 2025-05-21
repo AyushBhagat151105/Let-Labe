@@ -10,6 +10,7 @@ import Layout from "./components/Layout";
 import AdminRoute from "./components/AdminRoute";
 import AddProblem from "./page/AddProblem";
 import ProblemPage from "./page/ProblemPage";
+import Verify from "./page/Verify";
 
 function App() {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
@@ -37,6 +38,10 @@ function App() {
         <Route
           path="/signup"
           element={!authUser ? <Signup /> : <Navigate to="/dashbord" />}
+        />
+        <Route
+          path="/auth/verify/:token"
+          element={!authUser ? <Verify /> : <Navigate to="/dashboard" />}
         />
         <Route
           path="/dashbord"
