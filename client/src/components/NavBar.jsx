@@ -34,7 +34,7 @@ function NavBar() {
               <hr className="my-2 border-muted" />
             </div>
             <Link
-              to="profile"
+              to={`profile/${authUser?.id}`}
               className="flex items-center text-sm hover:text-primary transition-colors"
             >
               <User className="w-4 h-4 mr-2" />

@@ -11,6 +11,7 @@ import AdminRoute from "./components/AdminRoute";
 import AddProblem from "./page/AddProblem";
 import ProblemPage from "./page/ProblemPage";
 import Verify from "./page/Verify";
+import ProfilePage from "./page/Profile";
 
 function App() {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
@@ -48,7 +49,7 @@ function App() {
           element={authUser ? <Layout /> : <Navigate to="/login" />}
         >
           <Route index element={<Dashbord />} />
-          <Route path="profile" element={<div>Profile Page</div>} />
+          <Route path="profile/:id" element={<ProfilePage />} />
           <Route path="dashbord/problem/:id" element={<ProblemPage />} />
           <Route element={<AdminRoute />}>
             <Route path="add-problem" element={<AddProblem />} />

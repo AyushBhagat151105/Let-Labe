@@ -48,17 +48,16 @@ const SubmissionsList = ({ submissions, isLoading }) => {
       {submissions.map((submission) => {
         const avgMemory = calculateAverage(submission.memory);
         const avgTime = calculateAverage(submission.time);
-        const memoryArray = safeParse(submission.memory);
-        const timeArray = safeParse(submission.time);
         const isExpanded = expandedId === submission.id;
+        const testCases = submission.TestCaseResult || [];
 
         return (
           <Card
             key={submission.id}
-            className="hover:shadow-xl transition-shadow"
+            className="hover:shadow-lg transition-shadow"
           >
             <CardContent className="p-4">
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between items-start flex-wrap gap-4">
                 {/* Status and Language */}
                 <div className="flex items-center gap-4">
                   {submission.status === "Accepted" ? (
@@ -104,36 +103,60 @@ const SubmissionsList = ({ submissions, isLoading }) => {
 
               {/* Expanded Test Case Details */}
               {isExpanded && (
-                <div className="mt-4 bg-muted/30 p-3 rounded-lg text-sm">
-                  <div className="font-medium mb-2">Test Case Results:</div>
-                  <div className="space-y-1">
-                    {timeArray.map((t, index) => {
-                      const time = parseFloat(t.split(" ")[0]);
-                      const mem = memoryArray[index]
-                        ? parseFloat(memoryArray[index].split(" ")[0])
-                        : 0;
-                      return (
-                        <div
-                          key={index}
-                          className="flex justify-between items-center px-2 py-1 rounded hover:bg-muted/50"
-                        >
-                          <span className="text-muted-foreground">
-                            Test Case #{index + 1}
-                          </span>
-                          <div className="flex gap-4 text-muted-foreground">
-                            <span>
-                              <Clock className="inline w-4 h-4 mr-1" />
-                              {time.toFixed(3)} s
-                            </span>
-                            <span>
-                              <Memory className="inline w-4 h-4 mr-1" />
-                              {mem.toFixed(0)} KB
-                            </span>
-                          </div>
-                        </div>
-                      );
-                    })}
+                <div className="mt-4 bg-muted/20 p-4 rounded-lg text-sm space-y-2">
+                  <div className="font-semibold text-muted-foreground mb-2">
+                    Test Case Results:
                   </div>
+                  {testCases.map((tc, index) => (
+                    <div
+                      key={index}
+                      className={`rounded-xl p-4 border transition-all duration-300 bg-zinc-900 ${
+                        tc.passed ? "border-green-600/30" : "border-red-600/30"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          {tc.passed ? (
+                            <CheckCircle2 className="w-5 h-5 text-green-400" />
+                          ) : (
+                            <XCircle className="w-5 h-5 text-red-400" />
+                          )}
+                          <span className="font-medium text-zinc-300">
+                            Test Case #{tc.testCase}
+                          </span>
+                        </div>
+                        <div className="text-sm text-zinc-400 flex items-center gap-3">
+                          <span className="flex items-center gap-1">
+                            <Clock className="w-4 h-4" />
+                            {tc.time}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Memory className="w-4 h-4" />
+                            {tc.memory}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="grid md:grid-cols-2 gap-4 text-sm mt-2">
+                        <div className="bg-zinc-800 p-3 rounded-md border border-zinc-700">
+                          <span className="block text-xs font-semibold text-zinc-400 mb-1">
+                            Expected
+                          </span>
+                          <code className="block text-zinc-200 whitespace-pre-wrap">
+                            {tc.expected}
+                          </code>
+                        </div>
+                        <div className="bg-zinc-800 p-3 rounded-md border border-zinc-700">
+                          <span className="block text-xs font-semibold text-zinc-400 mb-1">
+                            Stdout
+                          </span>
+                          <code className="block text-zinc-200 whitespace-pre-wrap">
+                            {tc.stdout}
+                          </code>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               )}
             </CardContent>

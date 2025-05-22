@@ -43,9 +43,10 @@ export const useProblemStore = create((set, get) => ({
 
   getSolvedProblemByUser: async () => {
     try {
-      const res = await axiosInstance.get("/problem/get-solved-problem");
+      const res = await axiosInstance.get("/problem/get-solved-problems");
 
-      set({ solvedProblems: res.data.problems });
+      set({ solvedProblems: res.data.data });
+      console.log(res.data.data);
     } catch (error) {
       console.log("Error getting solved problems", error);
       toast.error("Error getting solved problems");
@@ -60,7 +61,7 @@ export const useProblemStore = create((set, get) => ({
 
       toast(res.data.message);
 
-      await get().getAllProblems()
+      await get().getAllProblems();
     } catch (error) {
       console.log("Error deleting problems", error);
       toast.error("Error deleting problems");
