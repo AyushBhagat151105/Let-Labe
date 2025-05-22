@@ -1,20 +1,25 @@
-FROM node:18
+FROM node:18-alpine AS builder
 
-# Set working directory
+RUN npm install -g pnpm
+
 WORKDIR /app
 
-# Install dependencies
-COPY package.json ./
-RUN npm install
+COPY package.json pnpm-lock.yaml* ./
+RUN pnpm install --frozen-lockfile
 
-# Copy all application files (including .env if present)
 COPY . .
 
-# Generate Prisma client AFTER copying all files
-RUN npx prisma generate
+RUN pnpm prisma generate
+RUN pnpm prune --prod
 
-# Expose the application's port
+FROM node:18-alpine
+
+RUN npm install -g pnpm
+
+WORKDIR /app
+
+COPY --from=builder /app /app
+
 EXPOSE 8080
 
-# Start the application
-CMD ["sh", "-c", "npx prisma migrate deploy && node src/app.js"]
+CMD ["sh", "-c", "pnpm prisma migrate deploy && node src/app.js"]
