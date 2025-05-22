@@ -12,6 +12,7 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { useProblemStore } from "@/store/useProblemStore";
+import { ProfileSettingsForm } from "@/components/ProfileSettingsForm";
 
 export default function ProfilePage() {
   const { getSolvedProblemByUser, solvedProblems, isProblemLoading } =
@@ -94,6 +95,7 @@ export default function ProfilePage() {
         </TabsContent>
 
         <TabsContent value="stats">
+          <ProfileSettingsForm />
           <div className="bg-muted p-6 rounded-xl text-center">
             <h2 className="text-lg font-semibold mb-2">Coming Soon</h2>
             <p className="text-muted-foreground">

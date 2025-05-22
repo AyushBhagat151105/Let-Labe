@@ -13,7 +13,7 @@ app.use(
     origin: [process.env.CLIENT_URL, process.env.SECOND_CLIENT_URL],
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"],
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
   })
 );
 
