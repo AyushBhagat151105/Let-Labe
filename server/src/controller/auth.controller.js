@@ -310,3 +310,25 @@ export const resetPassword = asyncHandler(async (req, res) => {
     .clearCookie("refreshToken")
     .json(new ApiResponse(200, "Password updated SuccessFully"));
 });
+
+export const updateUserDetails = asyncHandler(async (req, res) => {
+  
+  const { name, email } = req.body;
+  const userId = req.user.id;
+
+  const updatedUser = await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      name: name,
+      email: email,
+    },
+  });
+
+  if (!updatedUser) throw new ApiError(500, "User not updated");
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "User updated successfully"));
+})
