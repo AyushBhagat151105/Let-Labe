@@ -6,6 +6,7 @@ import {
   logout,
   refreshAccessToken,
   register,
+  resetPassword,
   verifyEmail,
 } from "../controller/auth.controller.js";
 import { isAuth } from "../middlewares/auth.middleware.js";
@@ -20,3 +21,4 @@ authRouter.get("/", isAuth, getUser);
 authRouter.post("/logout", isAuth, logout);
 authRouter.post("/refresh-token", isAuth, refreshAccessToken);
 authRouter.get("/check", isAuth, check);
+authRouter.patch("/reset-password", isAuth, resetPassword);

@@ -279,4 +279,34 @@ export const check = asyncHandler(async (req, res) => {
   });
 });
 
+export const resetPassword = asyncHandler(async (req, res) => {
+  const { password, newPassword } = req.body;
+  const userId = req.user.id;
 
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+
+  if (!user) throw new ApiError(400, "User not found");
+
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+
+  if (!isPasswordValid) throw new ApiError(400, "Invalid password");
+
+  const encryptedPassword = await bcrypt.hash(newPassword, 10);
+  const updatedUser = await prisma.user.update({
+    where: { id: userId },
+    data: {
+      password: encryptedPassword,
+    },
+  });
+
+  if (!updatedUser) throw new ApiError(500, "User not updated");
+  return res
+    .status(200)
+    .clearCookie("accessToken")
+    .clearCookie("refreshToken")
+    .json(new ApiResponse(200, "Password updated SuccessFully"));
+});
