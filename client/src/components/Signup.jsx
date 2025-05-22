@@ -34,7 +34,7 @@ function Signup() {
   const onSubmit = async (data) => {
     try {
       const res = await signup(data);
-      console.log("Sign up data:- ", data);
+      // console.log("Sign up data:- ", data);
 
       if (res?.statusCode === 200) {
         navigate("/login");

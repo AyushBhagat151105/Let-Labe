@@ -69,7 +69,7 @@ const ProblemTable = ({ problems }) => {
   const handleDelete = async (id) => {
     try {
       const res = await deleteProblem(id);
-      console.log(res);
+      // console.log(res);
     } catch (error) {
       console.log(error);
     }

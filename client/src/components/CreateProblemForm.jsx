@@ -77,15 +77,15 @@ function CreateProblemForm() {
 
   const onSubmit = async (value) => {
     try {
-      console.log(value);
+      // console.log(value);
 
       setIsLoading(true);
       const res = await axiosInstance.post("/problem/create-problem", value);
-      console.log(res.data);
+      // console.log(res.data);
       toast(res.data.message || "Problem Created successfully⚡");
       navigation("/dashbord");
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       const errorMessage =
         error?.response?.data?.error ||
         "Something went wrong ❌(Problem already in DataBase)";

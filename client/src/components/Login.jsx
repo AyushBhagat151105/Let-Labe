@@ -35,7 +35,7 @@ function Login() {
   const onSubmit = async (data) => {
     try {
       const res = await login(data);
-      console.log("login data:- ", res);
+      // console.log("login data:- ", res);
 
       // if (res.data.data.status === 200) {
       //   navigate("/dashboard");

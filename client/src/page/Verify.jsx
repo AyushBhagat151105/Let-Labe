@@ -6,14 +6,15 @@ import { useAuthStore } from "@/store/useAuthStore";
 export default function Verify() {
   const { token } = useParams();
   const navigate = useNavigate();
-  const verifyemail = useAuthStore((state) => state.verifyemail);
+  const verifyEmail = useAuthStore((state) => state.verifyEmail);
 
   const [status, setStatus] = useState("loading"); // 'loading', 'success', 'error'
+  // console.log(token);
 
   useEffect(() => {
     const verify = async () => {
       try {
-        await verifyemail(token);
+        await verifyEmail(token);
         setStatus("success");
 
         setTimeout(() => navigate("/login"), 2000);
@@ -55,7 +56,7 @@ export default function Verify() {
             Invalid or expired verification link.
           </p>
           <button
-            onClick={() => navigate("/register")}
+            onClick={() => navigate("/signup")}
             className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
           >
             Go to Register
