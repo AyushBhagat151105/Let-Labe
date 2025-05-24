@@ -5,11 +5,12 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
-import { MailTrap } from "../utils/mail.js";
+
 import { generateAccessTokenAndRefreshToken } from "../utils/jwtToken.js";
 import { options } from "../utils/cookiesOptions.js";
 import { validateSchema } from "../utils/validateSchema.js";
 import { loginSchema, registerSchema } from "../validation/zodValidation.js";
+import { ResendMailer } from "../utils/mail.js";
 
 export const register = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
@@ -49,7 +50,7 @@ export const register = asyncHandler(async (req, res) => {
     throw new ApiError(500, "User not created");
   }
   const link = `${process.env.CLIENT_URL}/auth/verify/${token}`;
-  const mail = new MailTrap(email);
+  const mail = new ResendMailer(email);
 
   const emailHTML = `
   <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; background-color: #f8f9fa; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
@@ -73,7 +74,7 @@ export const register = asyncHandler(async (req, res) => {
   </div>
 `;
 
-  mail.sendMail({
+  await mail.sendMail({
     subject: "Verify Your Email – Action Required",
     html: emailHTML,
   });
@@ -116,7 +117,7 @@ export const verifyEmail = asyncHandler(async (req, res) => {
     },
   });
 
-  const mail = new MailTrap(user.email);
+  const mail = new ResendMailer(user.email);
 
   const emailHTML = `
   <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; background-color: #f8f9fa; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
@@ -137,7 +138,7 @@ export const verifyEmail = asyncHandler(async (req, res) => {
   </div>
 `;
 
-  mail.sendMail({
+  await mail.sendMail({
     subject: "🎉 Your Account is Now Verified!",
     html: emailHTML,
   });

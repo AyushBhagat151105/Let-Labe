@@ -1,25 +1,27 @@
 import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
-const transporter = nodemailer.createTransport({
-  host: process.env.MAILTRAP_HOST,
-  port: process.env.MAILTRAP_PORT,
-  auth: {
-    user: process.env.MAILTRAP_USERNAME,
-    pass: process.env.MAILTRAP_PASSWORD,
-  },
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-export class MailTrap {
+export class ResendMailer {
   constructor(email) {
     this.email = email;
   }
 
   async sendMail({ subject, html }) {
-    await transporter.sendMail({
-      from: "Ayush <ayush@gmail.com>",
-      to: this.email,
-      subject,
-      html,
-    });
+    try {
+      const response = await resend.emails.send({
+        from: "Leet Lab <admin@email.ayushbhagat.live>",
+        to: [this.email],
+        subject: subject,
+        html: html,
+      });
+
+      console.log("Email sent successfully:", response);
+
+      return response;
+    } catch (error) {
+      console.error("Error sending email with Resend:", error);
+    }
   }
 }
