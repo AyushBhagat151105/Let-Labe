@@ -63,6 +63,7 @@ export const createProblem = asyncHandler(async (req, res) => {
     constraints,
     testcases,
     codeSnippets,
+    company,
     hints,
     editorial,
     referenceSolutions,

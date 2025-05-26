@@ -202,6 +202,27 @@ function CreateProblemForm() {
                   )}
                 </div>
 
+                <div className="form-control md:col-span-2">
+                  <label className="label">
+                    <span className="label-text text-base font-medium text-gray-300">
+                      Company
+                    </span>
+                  </label>
+                  <input
+                    type="text"
+                    className="input input-bordered w-full text-base p-3 bg-gray-800 focus:ring-2 focus:ring-primary/30 transition-all text-white px-3 rounded-2xl"
+                    {...register("company")}
+                    placeholder="Enter problem company"
+                  />
+                  {errors.title && (
+                    <label className="label">
+                      <span className="label-text-alt text-error text-red-500">
+                        {errors.title.message}
+                      </span>
+                    </label>
+                  )}
+                </div>
+
                 <div className="form-control">
                   <label className="label">
                     <span className="label-text text-base font-medium text-gray-700 dark:text-gray-300 rounded-2xl">
