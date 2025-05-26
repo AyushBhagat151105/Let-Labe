@@ -54,6 +54,7 @@ model Problem {
   userId      String
   examples    Json
   constraints String
+  company     String?
   hints       String?
   editorial   String?
 
