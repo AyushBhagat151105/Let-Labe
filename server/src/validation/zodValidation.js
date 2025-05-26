@@ -35,6 +35,7 @@ export const createProblemSchema = z.object({
   difficulty: z.enum(["EASY", "MEDIUM", "HARD"], {
     required_error: "Difficulty Required fild must be like EASY,MEDIUM,HARD",
   }),
+  company: z.string().min(1, "Company is required").optional(),
   tags: z
     .array(z.string({ required_error: "Tages are required" }))
     .min(1, "tags is required"),

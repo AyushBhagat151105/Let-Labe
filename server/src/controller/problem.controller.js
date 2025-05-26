@@ -100,6 +100,7 @@ export const createProblem = asyncHandler(async (req, res) => {
       codeSnippets,
       hints,
       editorial,
+      company,
       referenceSolutions,
       userId: req.user.id,
     },
